@@ -37,5 +37,17 @@ fun Route.course() {
                 call.respond(HttpStatusCode.NotFound)
             }
         }
+
+        get("/top") {
+            try {
+                val course: Course? = myCourses.maxBy { c -> c.level }
+                if(course != null)
+                    call.respond(course.toJson())
+                else
+                    call.respond("{\"status\":404, \"message\":$NO_COURSE_FOUND_MESSAGE}")
+            } catch (e: Exception) {
+                call.respond(HttpStatusCode.NotFound)
+            }
+        }
     }
 }
