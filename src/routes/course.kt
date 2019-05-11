@@ -3,8 +3,10 @@ package com.example.routes
 import com.example.NO_COURSE_FOUND_MESSAGE
 import com.example.toJson
 import io.ktor.application.call
+import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.response.respond
+import io.ktor.response.respondText
 import io.ktor.routing.*
 import model.Course
 
@@ -20,7 +22,7 @@ fun Route.course() {
         )
 
         get("/"){
-            call.respond(myCourses.toJson())
+            call.respondText(myCourses.toJson(), ContentType.Application.Json)
         }
 
         get("/{id}") {
@@ -28,9 +30,9 @@ fun Route.course() {
                 val id = call.parameters["id"]?.toInt()!!
                 val course: Course? = myCourses.find { c -> c.id == id }
                 if(course != null)
-                    call.respond(course.toJson())
+                    call.respondText(course.toJson(), ContentType.Application.Json)
                 else
-                    call.respond("{\"status\":404, \"message\":$NO_COURSE_FOUND_MESSAGE}")
+                    call.respondText("{\"status\":404, \"message\":$NO_COURSE_FOUND_MESSAGE}", ContentType.Application.Json)
             } catch (numberException: NumberFormatException){
                 call.respond(HttpStatusCode.BadRequest)
             } catch (e: Exception) {
@@ -42,9 +44,9 @@ fun Route.course() {
             try {
                 val course: Course? = myCourses.maxBy { c -> c.level }
                 if(course != null)
-                    call.respond(course.toJson())
+                    call.respondText(course.toJson(), ContentType.Application.Json)
                 else
-                    call.respond("{\"status\":404, \"message\":$NO_COURSE_FOUND_MESSAGE}")
+                    call.respondText("{\"status\":404, \"message\":$NO_COURSE_FOUND_MESSAGE}", ContentType.Application.Json)
             } catch (e: Exception) {
                 call.respond(HttpStatusCode.NotFound)
             }
