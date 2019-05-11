@@ -10,7 +10,11 @@ data class Course(val id: Int,
         val gson = Gson()
     }
 
-    fun toJson(): String {
-        return gson.toJson(this)
-    }
+    /**
+     * Return the course in a json format
+     *
+     * ex : {"id":42,"title":"title of the course","level":1,"isActive":true}
+     * @return all the values of the course as a json
+     */
+    fun toJson(): String = gson.toJson(this)
 }
